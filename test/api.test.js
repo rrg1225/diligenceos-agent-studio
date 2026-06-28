@@ -38,6 +38,9 @@ test("runs a cited diligence workflow with approval gates", async (t) => {
   assert.ok(run.final.quality.citedEvidence >= 3);
   assert.equal(run.final.quality.externalWrites, 0);
   assert.equal(run.final.memo.approval.requiresApproval, true);
+  assert.equal(run.final.committeeDecision.verdict, "conditional-review");
+  assert.equal(run.final.committeeDecision.evidenceCoverage, "sufficient");
+  assert.match(run.final.committeeDecision.oneLine, /committee approval is required/);
 });
 
 test("blocks fabricated evidence and approval bypass instructions", async (t) => {

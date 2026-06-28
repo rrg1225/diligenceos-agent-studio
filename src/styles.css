@@ -224,6 +224,25 @@ textarea {
   font-size: 1.05rem;
 }
 
+.decision-band {
+  background: #f1f7f4;
+  border: 1px solid #b8d8c8;
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+  padding: 12px;
+}
+
+.decision-band strong {
+  color: #14523a;
+  text-transform: uppercase;
+}
+
+.decision-band span {
+  color: #344054;
+}
+
 .metric {
   background: #f7faf9;
   border: 1px solid #dcebe7;

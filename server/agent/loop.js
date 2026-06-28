@@ -84,6 +84,7 @@ function finish(state, status, reason) {
     reason,
     policy: state.policy,
     memo,
+    committeeDecision: buildCommitteeDecision({ status, memo, evidence, risk }),
     quality: {
       citedEvidence: evidence?.citations?.length || 0,
       riskScore: risk?.riskScore || 0,
@@ -94,6 +95,27 @@ function finish(state, status, reason) {
     }
   };
   return state;
+}
+
+function buildCommitteeDecision({ status, memo, evidence, risk }) {
+  const evidenceCount = evidence?.citations?.length || 0;
+  const approval = memo?.approval;
+  const riskScore = risk?.riskScore || 0;
+  const posture = risk?.posture || "unknown";
+  const openRisks = risk?.redFlags || [];
+
+  return {
+    verdict: status === "blocked" ? "blocked" : approval?.requiresApproval ? "conditional-review" : "ready-to-advance",
+    gate: approval?.gate || "policy",
+    posture,
+    riskScore,
+    evidenceCoverage: evidenceCount >= 5 ? "strong" : evidenceCount >= 3 ? "sufficient" : "thin",
+    openRiskCount: openRisks.length,
+    oneLine:
+      status === "blocked"
+        ? "Request is blocked by policy before any tool execution."
+        : `${posture} risk profile with ${evidenceCount} cited evidence items; ${approval?.requiresApproval ? "committee approval is required" : "standard follow-up is sufficient"}.`
+  };
 }
 
 function event(step, phase, payload) {

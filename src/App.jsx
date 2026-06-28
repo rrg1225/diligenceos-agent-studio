@@ -83,6 +83,7 @@ export default function App() {
   }, [run]);
 
   const memo = run?.final?.memo;
+  const decision = run?.final?.committeeDecision;
 
   return (
     <main className="shell">
@@ -177,11 +178,19 @@ export default function App() {
               <span className={`status ${run.status}`}>{run.status}</span>
             </div>
             <p className="memo-summary">{memo.summary}</p>
+            {decision && (
+              <div className="decision-band">
+                <strong>{decision.verdict}</strong>
+                <span>{decision.oneLine}</span>
+              </div>
+            )}
             <div className="metric-grid">
               <Metric label="Risk score" value={run.final.quality.riskScore} />
               <Metric label="Evidence" value={run.final.quality.citedEvidence} />
               <Metric label="Validated" value={run.final.quality.validatedTools} />
               <Metric label="Writes" value={run.final.quality.externalWrites} />
+              <Metric label="Coverage" value={decision?.evidenceCoverage || "-"} />
+              <Metric label="Open risks" value={decision?.openRiskCount ?? "-"} />
             </div>
             <h3>Recommendation</h3>
             <p>{memo.recommendation}</p>
